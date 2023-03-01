@@ -1,0 +1,19 @@
+.signatureList {
+  border: solid 2px white;
+}
+
+.signatureItem {
+  color: red;
+  border: solid 2px white;
+}
+
+.nameRow {
+  border-bottom: 1px solid white;
+}
+
+.message {
+}
+
+.signatureDateRow {
+  border-bottom: 1px solid white;
+}
