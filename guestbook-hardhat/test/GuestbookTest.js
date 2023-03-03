@@ -1,19 +1,32 @@
-// import Chai to use asserting functions.
+const { ethers } = require("hardhat");
 const { expect } = require("chai");
-// loadfixtures is for sharing common setups (or fixtures) between tests.
+
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
 
-describe("Guestbook contract", function () {
-  // Define a fixture to reuse the same setup in every test.
-  async function deployGuestbookFixture() {
-    // get the Contract factory, signers and providers here
-    const Guestbook = await ethers.getContractFactory("Guestbook");
-    const [addr1] = await ethers.getSigners();
+const MAX_NUM_SIGN = 200;
 
-    const hardhatGuestbook = await Guestbook.deploy();
+describe("Guestbook contract", function () {
+  async function deployGuestbookFixture() {
+    const Guestbook = await ethers.getContractFactory("Guestbook");
+    // Get default provider and signers
+    const defaultProvider = await ethers.getDefaultProvider();
+    const [addr1, addr2] = await ethers.getSigners();
+
+    const hardhatGuestbook = await Guestbook.deploy(MAX_NUM_SIGN);
     await hardhatGuestbook.deployed();
 
-    // fixtures can return anything useful
-    return { Guestbook, hardhatGuestbook, addr1 };
+    return { Guestbook, hardhatGuestbook, defaultProvider, addr1, addr2 };
   }
+
+  // Test for the correct inital values of maxNumberOfSignatures and numberOfSignatures.
+  describe("Deployment", function () {
+    it("Initial values", async function () {
+      const { hardhatGuestbook } = await loadFixture(deployGuestbookFixture);
+
+      expect(await hardhatGuestbook.numberOfSignatures()).to.equal(0);
+      expect(await hardhatGuestbook.maxNumberOfSignatures()).to.equal(
+        MAX_NUM_SIGN
+      );
+    });
+  });
 });
