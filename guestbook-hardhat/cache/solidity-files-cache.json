@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\alexl\\Documents\\projects\\guest-book-app\\guestbook-hardhat\\contracts\\Guestbook.sol": {
-      "lastModificationDate": 1677854606203,
-      "contentHash": "e6a43a9ab183af72ba01b997ae7aabc4",
+      "lastModificationDate": 1677952242182,
+      "contentHash": "06ed138b52bfe68189c8c63c562fd2b4",
       "sourceName": "contracts/Guestbook.sol",
       "solcConfig": {
         "version": "0.8.17",
