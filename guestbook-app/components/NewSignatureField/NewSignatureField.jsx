@@ -26,7 +26,7 @@ export default function NewSignatureField({
   return (
     !hasSigned && (
       <div className={`${styles.wrapper}`}>
-        <label for="name">Name:</label>
+        <label htmlFor="name">Name:</label>
         <input
           id="name"
           className={`${styles.nameInput}`}
@@ -35,7 +35,7 @@ export default function NewSignatureField({
           onChange={handleNameChange}
           maxLength={maxLengthOfName}
         ></input>
-        <label for="msg">Message:</label>
+        <label htmlFor="msg">Message:</label>
         <textarea
           maxLength={maxLengthOfMessage}
           id="msg"
