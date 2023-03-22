@@ -1,0 +1,21 @@
+.wrapper {
+  border-bottom: 1px solid white;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper:last-child {
+  border: 0;
+}
+
+.addressDateRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nameRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

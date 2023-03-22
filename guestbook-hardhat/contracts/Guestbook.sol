@@ -1,54 +1,50 @@
 // SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.17;
 
 contract Guestbook {
-  // Max number of signatures.
-  uint8 public maxNumberOfSignatures;
-    // Max length of name.
-  uint8 public maxLengthOfName;
-    // Max number of message.
-  uint8 public maxLengthOfMessage;
-  // Signature counter
-  uint8 public numberOfSignatures;
+  uint public immutable MAX_NUM_SIGN;
+  uint public immutable MAX_NAME_LENGTH;
+  uint public immutable MAX_MSG_LENGTH;
+  uint public numOfSign;
 
-  // Create struct Signature
   struct Signature {
-    address id;
-    string name;
+    address addr;
     string message;
-    uint time;
+    string name;
+    uint timestamp;
   }
 
-  Signature[] public guestbookSignatures;
-  mapping(address => bool) public guestbookAddressesLog;
+  mapping(address => bool) public signatureLog;
 
-  // We initialize maxNumberOfSignatures i.e. the length of the guestbook.
-  constructor(uint8 _maxNumberOfSignatures, uint8 _maxLengthOfName, uint8 _maxLengthOfMessage){
-    maxNumberOfSignatures = _maxNumberOfSignatures;
-    maxLengthOfName = _maxLengthOfName;
-    maxLengthOfMessage = _maxLengthOfMessage;
+  Signature[] public signatures;
+
+  event SignatureCreated(address indexed addr, uint timestamp);
+
+  constructor(uint _maxNumSign, uint _maxNameLength, uint _maxMsgLength) {
+    require(_maxNumSign > 0);
+    require(_maxNameLength > 0 && _maxNameLength <= type(uint).max);
+    require(_maxMsgLength > 0 && _maxMsgLength <= type(uint).max);
+
+    MAX_NUM_SIGN = _maxNumSign;
+    MAX_NAME_LENGTH = _maxNameLength;
+    MAX_MSG_LENGTH = _maxMsgLength;
   }
 
-  // Create the signature added event
-  event SignatureAdded(address indexed sender, string message);
-
-  // The function for adding a new signature on the guestbook
-  function signGuestbook(string memory _name, string memory _message) public {
-    require(numberOfSignatures <  maxNumberOfSignatures, "The guestbook is filled!");
-    require(bytes(_name).length > 0, "Please enter your name!");
-    require(bytes(_name).length <= maxLengthOfName, "Please enter a shorter name!");
-    require(bytes(_message).length > 0, "Please enter a message!");
-    require(bytes(_message).length > maxLengthOfMessage, "Please enter a shorter message!");
-    require(guestbookAddressesLog[msg.sender] == false, "You have already signed the guestbook!");
-
-    guestbookSignatures.push(Signature(msg.sender, _name, _message, block.timestamp));
-    guestbookAddressesLog[msg.sender] = true;
-    numberOfSignatures = numberOfSignatures + 1;
-
-    emit SignatureAdded(msg.sender, "Guestbook signed!");
+  function getAllSignatures() public view returns (Signature[] memory){
+    return signatures;
   }
 
-  function getGuestbookSignatures() public view returns(Signature[] memory){
-    return guestbookSignatures;
+  function getHasUserSigned() public view returns (bool) {
+    return signatureLog[msg.sender];
+  }
+
+  function addSignature(string memory _msg, string memory _name) public {
+    require(signatureLog[msg.sender] == false);
+    require(numOfSign < MAX_NUM_SIGN);
+    // require string length
+    signatures.push(Signature(msg.sender, _msg, _name, block.timestamp));
+    signatureLog[msg.sender] = true;
+    numOfSign += 1;
+    emit SignatureCreated(msg.sender, block.timestamp);
   }
 }

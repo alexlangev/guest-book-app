@@ -1,3 +1,19 @@
 .wrapper {
-  border: solid 2px yellow;
+  border: solid 1px yellow;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.nameInput {
+  max-width: 200px;
+}
+
+.msgInput {
+  width: 400px;
+}
+
+.submitButton {
+  width: fit-content;
+  margin-top: 16px;
 }
